@@ -30,7 +30,7 @@ public class ApplicationPlanDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	int id;
+	private long id;
 	private int plan;
 	private float amortization;
 	private float interest;
@@ -39,6 +39,7 @@ public class ApplicationPlanDetails {
 	private float debtBalance;
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
+	private boolean isMailSent = false;
 	
 	@ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "application_id"), name = "application_id")

@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.brixo.sytem.creditmanagement.model.ApplicationPlanDetails;
+import com.brixo.sytem.creditmanagement.service.EmailSenderService;
 import com.brixo.sytem.creditmanagement.service.InvoicePdfWriterService;
 import com.brixo.sytem.creditmanagement.service.PlanService;
 import com.itextpdf.text.DocumentException;
@@ -26,29 +29,33 @@ public class EmailSchedulingProcess {
     
 	@Autowired
 	private PlanService planService;
+	
+	@Autowired
+	private EmailSenderService emailService;
+	 
     
 	@Scheduled(cron = "0 * * * * ?")
-	public void scheduleTaskWithCronExpression() throws FileNotFoundException, DocumentException {
+	public void scheduleTaskWithCronExpression() throws FileNotFoundException, DocumentException, MessagingException {
 		
 	    logger.info("Cron Task :: Execution  Time - {}", dateTimeFormatter.format(LocalDateTime.now()));
-	    
+	    String name;
+	    String response;
 	    LocalDateTime currenttime = LocalDateTime.now();
 	    List<ApplicationPlanDetails> getAllValidInvoicingData =
 	    		planService.findAllValidPlan(currenttime,currenttime.now().plusMinutes(5));
 		System.out.println(getAllValidInvoicingData.size());
 		System.out.println(" time "+currenttime);
 		
-	    getAllValidInvoicingData.forEach(action->{
-	    	
-	    	 try {
-				pdfService.pdfWriter(action);
-			} catch (FileNotFoundException | DocumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    });
+		for(ApplicationPlanDetails action:getAllValidInvoicingData) {
+				 name = pdfService.pdfWriter(action);
+			 response = emailService.sendEmail(action,name);
+			if( response.equalsIgnoreCase("Mail Sent Successfully") )
+			 planService.updateByPlanId(action);
+		}
+	    
 	   
 	    
 	}
 	
+
 }

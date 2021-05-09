@@ -2,6 +2,7 @@ package com.brixo.sytem.creditmanagement.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,15 @@ public class PlanService {
 		return appPlanDtlRepo.findByApplicationAndPlan(application, plan);
 	}
 	public List<ApplicationPlanDetails> findAllValidPlan(LocalDateTime StartTime,LocalDateTime EndTime) {
-		return appPlanDtlRepo.findAllByStartTimeGreaterThanEqualAndStartTimeLessThanEqual(StartTime, EndTime);
+		return appPlanDtlRepo.findAllByStartTimeGreaterThanEqualAndStartTimeLessThanEqualAndPlanNotAndIsMailSent(StartTime, EndTime,0,false);
 		
+	}
+	
+	public void updateByPlanId(ApplicationPlanDetails planDtl) {
+		Optional<ApplicationPlanDetails> plantoUpdate = appPlanDtlRepo.findById(planDtl.getId());
+		plantoUpdate.ifPresent(consumer->{
+			consumer.setMailSent(true);
+		});
+		appPlanDtlRepo.save(plantoUpdate.get());
 	}
 }
