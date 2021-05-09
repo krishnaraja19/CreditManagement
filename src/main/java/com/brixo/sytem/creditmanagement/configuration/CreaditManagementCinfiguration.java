@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import com.brixo.sytem.creditmanagement.service.InvoicePdfWriterService;
+
 
 
 
@@ -15,8 +17,5 @@ public class CreaditManagementCinfiguration {
 	public RestTemplate getRestTemplate() {
 		return new RestTemplate();
 	}
-	
-	
-	
 
 }

@@ -1,5 +1,6 @@
 package com.brixo.sytem.creditmanagement.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,9 @@ public class PlanService {
 	}
 	public ApplicationPlanDetails findByApplicationAndPlanDetails(Application application, int plan) {
 		return appPlanDtlRepo.findByApplicationAndPlan(application, plan);
+	}
+	public List<ApplicationPlanDetails> findAllValidPlan(LocalDateTime StartTime,LocalDateTime EndTime) {
+		return appPlanDtlRepo.findAllByStartTimeGreaterThanEqualAndStartTimeLessThanEqual(StartTime, EndTime);
+		
 	}
 }
