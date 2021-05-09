@@ -49,8 +49,8 @@ public class EmailSenderService implements IEmailSender {
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		  
 		  helper.setFrom("krishnaaltran@gmail.com");
-		  //helper.setTo(details.getApplication().getEmail());
-		  helper.setTo("krishnaraja19@gmail.com");
+		  helper.setTo(details.getApplication().getEmail());
+		   //helper.setTo("krishnaraja19@gmail.com");
 		    helper.setSubject(subject);
 		    helper.setText(content);
 		    FileSystemResource file 

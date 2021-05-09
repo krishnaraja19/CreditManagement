@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import com.brixo.sytem.creditmanagement.service.ApplicationService;
 import com.brixo.sytem.creditmanagement.service.EmailSenderService;
 import com.brixo.sytem.creditmanagement.service.InvoicePdfWriterService;
 
@@ -22,5 +23,6 @@ public class CreaditManagementCinfiguration {
 	public EmailSenderService getEmailSenderService() {
 		return new EmailSenderService();
 	}
+	
 
 }

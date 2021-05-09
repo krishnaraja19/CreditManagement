@@ -20,7 +20,7 @@ public class CreditManagementContoller {
 	private ApplicationService appService;
 	
 	@RequestMapping("/allapplcation")
-	public List <Application> getApplications() throws ParseException, JsonMappingException, JsonProcessingException {
+	public List <Application> getApplications(){
 		return appService.getAllApplication();
 	}
 	
