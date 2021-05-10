@@ -12,5 +12,6 @@ import com.brixo.sytem.creditmanagement.model.ApplicationPlanDetails;
 @Repository
 public interface ApplicationPlanDetailsRepository extends JpaRepository<ApplicationPlanDetails, Long>{
 	ApplicationPlanDetails findByApplicationAndPlan(Application application, int plan);
+	List<ApplicationPlanDetails> findByApplication(Application application);
 	List<ApplicationPlanDetails> findAllByStartTimeGreaterThanEqualAndStartTimeLessThanEqualAndPlanNotAndIsMailSent(LocalDateTime startDate,LocalDateTime startDatee,int plan,boolean flag);
 }

@@ -8,6 +8,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -30,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent>{
+	private static final Logger logger = LoggerFactory.getLogger(ApplicationStartup.class);
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -40,9 +43,10 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	@Autowired
 	private PlanService planService;
 	
-	
-	
 	String url="https://interview.brixo.se/api/application";
+	
+	
+	//construt the constant vaues
     @SuppressWarnings("rawtypes")
 	public static HttpEntity getHttpEntity() {
     	HttpHeaders headers = new HttpHeaders();
@@ -56,6 +60,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
     	return entity;
     }
     
+  
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 		// TODO Auto-generated method stub
@@ -65,9 +70,11 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		appDetailsDataInsertion();
 	}
 	
+	//Insert application data to APPLICATION table
 	public void saveAllApplicationData() {
 		List<Application> applicationList = null;
 		try {
+			logger.info("Save all application to details to APPLICATION table");
 			applicationList = ObjectMapping();
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
@@ -82,9 +89,11 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		appService.saveAllApplication(applicationList);
 	}
 	
+	//Converting JSON array to Application Model API
 	public List<Application> ObjectMapping() throws ParseException, JsonMappingException, JsonProcessingException{
 		JSONArray jsonArray  = getAllApplicationJsonArray();
 		ObjectMapper mapper = new ObjectMapper();
+		logger.info("Converting JSON array to Application Model API");
 		mapper.enable(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS);
 		System.out.println(jsonArray.toString());
 		Application[] applications = null;
@@ -92,7 +101,10 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		return Arrays.asList(applications);
 	}
 	
+	// Calling BRIXO Api and getting Data in JSON format
 	public JSONArray getAllApplicationJsonArray() throws ParseException {
+		
+		logger.info("Getting Value from Brixo API by JSON array.");
 		JSONArray jsonArray = null;
 		ResponseEntity<String> responseEntity  =   restTemplate.exchange(
 			    url, HttpMethod.GET, getHttpEntity(),  String.class);
@@ -111,6 +123,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
         }
 		return jsonArray;
 	}
+	
+	// Calculating Plan details as Brixo business rules
 	public void appDetailsDataInsertion() {
 		List<Application> listofApplication = appService.getAllApplication();
 		float interestAmount;
@@ -118,6 +132,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		float amorizationAmount;
 		int plan =0;
 		float mPA = 0; 
+		logger.info("Calculating business logic as per Brixo and inserting reacord into "
+				+ "Application Details table via JPA");
 		for(Application application:listofApplication) {
 			
 			plan = 0;
