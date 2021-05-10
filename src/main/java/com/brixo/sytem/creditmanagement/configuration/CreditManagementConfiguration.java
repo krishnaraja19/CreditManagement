@@ -8,15 +8,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import com.brixo.sytem.creditmanagement.service.ApplicationService;
 import com.brixo.sytem.creditmanagement.service.EmailSenderService;
-import com.brixo.sytem.creditmanagement.service.InvoicePdfWriterService;
 
 
 
 
 @Configuration
-public class CreaditManagementConfiguration {
+public class CreditManagementConfiguration {
 	
 	
 	@Bean
