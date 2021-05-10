@@ -16,7 +16,7 @@ import com.brixo.sytem.creditmanagement.service.InvoicePdfWriterService;
 
 
 @Configuration
-public class CreaditManagementCinfiguration {
+public class CreaditManagementConfiguration {
 	
 	
 	@Bean
