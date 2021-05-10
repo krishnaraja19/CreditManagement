@@ -44,13 +44,13 @@ public class EmailSchedulingProcess {
 	    List<ApplicationPlanDetails> getAllValidInvoicingData =
 	    		planService.findAllValidPlan(currenttime,currenttime.now().plusMinutes(5));
 
-//		
-//		for(ApplicationPlanDetails action:getAllValidInvoicingData) {
-//				 name = pdfService.pdfWriter(action);
-//			 response = emailService.sendEmail(action,name);
-//			if( response.equalsIgnoreCase("Mail Sent Successfully") )
-//			 planService.updateByPlanId(action);
-//		}
+	
+		for(ApplicationPlanDetails action:getAllValidInvoicingData) {
+				 name = pdfService.pdfWriter(action);
+				 response = emailService.sendEmail(action,name);
+				 if( response.equalsIgnoreCase("Mail Sent Successfully") )
+					 planService.updateByPlanId(action);
+		}
 	    
 	   
 	    
